@@ -66,8 +66,8 @@ var App = Ember.Application.extend(Ember.Evented, {
     if (config.pro) {
       this.identifyCustomer(user);
     }
-    if (config.userlike) {
-      this.setupUserlike(user);
+    if (config.beacon) {
+      this.setupHsBeacon();
     }
     return this.subscribePusher(user);
   },
@@ -90,26 +90,18 @@ var App = Ember.Application.extend(Ember.Evented, {
     return Travis.pusher.subscribeAll(channels);
   },
 
-  setupUserlike(user) {
-    var btn, s, userlikeData;
-    btn = document.getElementById('userlikeCustomTab');
-    btn.classList.add("logged-in");
-    userlikeData = window.userlikeData = {};
-    userlikeData.user = {};
-    userlikeData.user.name = user.login;
-    userlikeData.user.email = user.email;
-    if (!document.getElementById('userlike-script')) {
-      s = document.createElement('script');
-      s.id = 'userlike-script';
-      s.src = '//userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/0327dbb23382ccbbb91b445b76e8a91d4b37d90ef9f2faf84e11177847ff7bb9.js';
+  setupHsBeacon() {
+    if (!document.getElementById('beacon-script')) {
+      let s = document.createElement('script');
+      s.id = 'beacon-script';
+      let code = '!function(e,o,n){window.HSCW=o,window.HS=n,n.beacon=n.beacon||{};var t=n.beacon;t.userConfig={},t.readyQueue=[],t.config=function(e){this.userConfig=e},t.ready=function(e){this.readyQueue.push(e)},o.config={docs:{enabled:!1,baseUrl:""},contact:{enabled:!0,formId:"f48f821c-fb20-11e5-a329-0ee2467769ff"}};var r=e.getElementsByTagName("script")[0],c=e.createElement("script");c.type="text/javascript",c.async=!0,c.src="https://djtflbt20bdde.cloudfront.net/",r.parentNode.insertBefore(c,r)}(document,window.HSCW||{},window.HS||{});';
+      try {
+        s.appendChild(document.createTextNode(code));        
+      } catch (e) {
+        s.text = code;
+      }
       return document.body.appendChild(s);
     }
-  },
-
-  removeUserlike() {
-    var btn;
-    btn = document.getElementById('userlikeCustomTab');
-    return btn.classList.remove("logged-in");
   },
 
   identifyCustomer(user) {

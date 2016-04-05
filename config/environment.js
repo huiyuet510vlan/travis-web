@@ -54,6 +54,7 @@ module.exports = function(environment) {
         caches: true
       };
       ENV.userlike = true;
+      ENV.beacon = true;
       ENV.urls = {
         legal: ENV.billingEndpoint + "/pages/legal",
         imprint: ENV.billingEndpoint + "/pages/imprint",
